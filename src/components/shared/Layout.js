@@ -1,10 +1,20 @@
-import React from "react";
-import { useLayoutStyles } from "../../styles";
+import React from 'react';
+import SEO from '../shared/Seo';
+import { useLayoutStyles } from '../../styles';
 
-function Layout() {
-  useLayoutStyles();
+function Layout({ children, title }) {
+  const classes = useLayoutStyles();
 
-  return <div>Layout</div>;
+  return (
+    <section className={classes.section}>
+      <SEO title={title}/>
+      <main className={classes.main}>
+        <section className={classes.childrenWrapper}>
+          <div className={classes.children}>{children}</div>
+        </section>
+      </main>
+    </section>
+  );
 }
 
 export default Layout;
