@@ -3,13 +3,13 @@ import { useFeedPostStyles } from '../../styles';
 import UserCard from '../shared/UserCard';
 import { MoreIcon, CommentIcon, ShareIcon } from '../../icons';
 import { Link } from 'react-router-dom';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Hidden, Divider } from '@material-ui/core';
 import HTMLEllipsis from 'react-lines-ellipsis/lib/html';
 
 function FeedPost({ post }) {
   const classes = useFeedPostStyles();
   const [showCaption, setCaption] = React.useState(false);
-  const { media, id, likes, user, caption } = post;
+  const { media, id, likes, user, caption, comments } = post;
 
   return (
     <>
@@ -26,12 +26,12 @@ function FeedPost({ post }) {
         {/* Feed Post Buttons*/}
         <div className={classes.postButtonWrapper}>
           <div className={classes.postButtons}>
-            {/* <LikeButton /> */}
+            <LikeButton />
             <Link to={`/p/${id}`}>
               <CommentIcon />
             </Link>
             <ShareIcon />
-            {/* <SaveButton /> */}
+            <SaveButton />
           </div>
           <Typography className={classes.like} variant='subtitle2'>
             <span>{likes === 1 ? '1 like' : `${likes} likes`}</span>
@@ -70,14 +70,54 @@ function FeedPost({ post }) {
               </div>
             )}
           </div>
+          <Link to={`/p/${id}`}>
+            <Typography
+              className={classes.commentsLink}
+              variant='body2'
+              component='div'
+            >
+              View all {comments.length} comments
+            </Typography>
+          </Link>
+          {comments.map((comment) => (
+            <div key={comment.id}>
+              <Link to={`/${comment.user.username}`}>
+                <Typography
+                  variant='subtitle2'
+                  component='span'
+                  className={classes.commentUsername}
+                >
+                  {comment.user.username}
+                </Typography>{' '}
+                <Typography variant='body2' component='span'>
+                  {comment.content}
+                </Typography>
+              </Link>
+            </div>
+          ))}
+          <Typography color='textSecondary' className={classes.datePosted}>
+            5 DAYS AGO
+          </Typography>
         </div>
+        <Hidden xsDown>
+          <Divider />
+          <Comment />
+        </Hidden>
       </article>
     </>
   );
 }
 
-function LikeButton() {}
+function LikeButton() {
+  return <>LikeButton</>;
+}
 
-function SaveButton() {}
+function SaveButton() {
+  return <>SaveButton</>;
+}
+
+function Comment() {
+  return <>Comment</>;
+}
 
 export default FeedPost;
