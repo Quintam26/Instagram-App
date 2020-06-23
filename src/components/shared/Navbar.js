@@ -1,12 +1,15 @@
 import React from 'react';
 import { useNavbarStyles } from '../../styles';
-import { AppBar, Hidden, InputBase } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { AppBar, Hidden, InputBase, Avatar } from '@material-ui/core';
+import { Link, useHistory } from 'react-router-dom';
 import logo from '../../images/logo.png';
-import { LoadingIcon } from '../../icons';
+import { defaultCurrentUser } from '../../data';
+import { LoadingIcon, AddIcon, LikeIcon, LikeActiveIcon, ExploreIcon, ExploreActiveIcon, HomeIcon, HomeActiveIcon } from '../../icons';
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles();
+  const history = useHistory();
+  const path = history.location.pathname;
 
   return (
     <AppBar className={classes.appBar}>
@@ -15,7 +18,7 @@ function Navbar({ minimalNavbar }) {
         {!minimalNavbar && (
           <>
             <Search />
-            <Links />
+            <Links path={path}/>
           </>
         )}
       </section>
@@ -41,7 +44,7 @@ function Search() {
   const classes = useNavbarStyles();
   const [query, setQuery] = React.useState('');
 
-  let loading = true;
+  let loading = false;
 
   function handleClearInput() {
     setQuery('');
@@ -67,8 +70,33 @@ function Search() {
   );
 }
 
-function Links() {
-  return <>Links</>
+function Links({ path }) {
+  const classes = useNavbarStyles();
+  const [showList, setList] = React.useState(false);
+
+  return (
+    <div className={classes.linksContainer}>
+      <div className={classes.linksWrapper}>
+        <Hidden xsDown>
+          <AddIcon />
+        </Hidden>
+        <Link to='/'>
+          {path === '/' ? <HomeActiveIcon /> : <HomeIcon />}
+        </Link>
+        <Link to='/explore'>
+          {path === '/explore' ? <ExploreActiveIcon /> : <ExploreIcon />}
+        </Link>
+        <div className={classes.notifications}>
+          {showList ? <LikeActiveIcon /> : <LikeIcon />}
+        </div>
+        <Link to={`/${defaultCurrentUser.username}`}>
+          <div className={path === `/${defaultCurrentUser.username}` ? classes.profileActive : ''}>
+          </div>
+          <Avatar src={defaultCurrentUser.profile_image} className={classes.profileImage}/>
+        </Link>
+      </div>
+    </div>
+  )
 }
 
 export default Navbar;
