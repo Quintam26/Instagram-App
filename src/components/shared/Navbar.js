@@ -1,6 +1,15 @@
 import React from 'react';
-import { useNavbarStyles, WhiteTooltip } from '../../styles';
-import { AppBar, Hidden, InputBase, Avatar, Fade, Grid, Typography } from '@material-ui/core';
+import { useNavbarStyles, WhiteTooltip, RedTooltip } from '../../styles';
+import {
+  AppBar,
+  Hidden,
+  InputBase,
+  Avatar,
+  Fade,
+  Grid,
+  Typography,
+  Zoom,
+} from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import logo from '../../images/logo.png';
 import { defaultCurrentUser, getDefaultUser } from '../../data';
@@ -14,6 +23,7 @@ import {
   HomeIcon,
   HomeActiveIcon,
 } from '../../icons';
+import NotificationTooltip from '../notification/NotificationTooltip';
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles();
@@ -26,7 +36,7 @@ function Navbar({ minimalNavbar }) {
         <Logo />
         {!minimalNavbar && (
           <>
-            <Search />
+            <Search history={history} />
             <Links path={path} />
           </>
         )}
@@ -49,7 +59,7 @@ function Logo() {
   );
 }
 
-function Search() {
+function Search({ history }) {
   const classes = useNavbarStyles();
   const [loading, setLoading] = React.useState(false);
   const [results, setResults] = React.useState([]);
@@ -76,16 +86,22 @@ function Search() {
         title={
           hasResults && (
             <Grid className={classes.resultContainer} container>
-              {results.map(result => (
-                <Grid key={result.id} item className={classes.resultLink}>
+              {results.map((result) => (
+                <Grid
+                  key={result.id}
+                  item
+                  className={classes.resultLink}
+                  onClick={() => {
+                    history.push(`/${result.username}`);
+                    handleClearInput();
+                  }}
+                >
                   <div className={classes.resultWrapper}>
                     <div className={classes.avatarWrapper}>
                       <Avatar src={result.profile_image} alt='user avatar' />
                     </div>
                     <div className={classes.nameWrapper}>
-                      <Typography variant='body1'>
-                        {result.username}
-                      </Typography>
+                      <Typography variant='body1'>{result.username}</Typography>
                       <Typography variant='body2' color='textSecondary'>
                         {result.name}
                       </Typography>
@@ -119,9 +135,21 @@ function Search() {
 function Links({ path }) {
   const classes = useNavbarStyles();
   const [showList, setList] = React.useState(false);
+  const [showTooltip, setTooltip] = React.useState(true);
+
+  React.useEffect(() => {
+    const timeout = setTimeout(handleHideTooltip, 5000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   function handleToggleList() {
     setList((prev) => !prev);
+  }
+
+  function handleHideTooltip() {
+    setTooltip(false);
   }
 
   return (
@@ -134,9 +162,17 @@ function Links({ path }) {
         <Link to='/explore'>
           {path === '/explore' ? <ExploreActiveIcon /> : <ExploreIcon />}
         </Link>
-        <div className={classes.notifications} onClick={handleToggleList}>
-          {showList ? <LikeActiveIcon /> : <LikeIcon />}
-        </div>
+        <RedTooltip
+          arrow
+          open={showTooltip}
+          onOpen={handleHideTooltip}
+          TransitionComponent={Zoom}
+          title={<NotificationTooltip />}
+        >
+          <div className={classes.notifications} onClick={handleToggleList}>
+            {showList ? <LikeActiveIcon /> : <LikeIcon />}
+          </div>
+        </RedTooltip>
         <Link to={`/${defaultCurrentUser.username}`}>
           <div
             className={
