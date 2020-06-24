@@ -14,7 +14,7 @@ function FeedPage() {
   const [isEndOfFeed] = React.useState(false);
 
   let loading = false;
-  if(loading) return <LoadingScreen/>
+  if (loading) return <LoadingScreen />;
 
   return (
     <Layout>
@@ -29,7 +29,7 @@ function FeedPage() {
         <Hidden smDown>
           <div className={classes.sidebarContainer}>
             <div className={classes.sidebarWrapper}>
-              <UserCard avatarSize={50}/>
+              <UserCard avatarSize={50} />
               <FeedSideSuggestions />
             </div>
           </div>
