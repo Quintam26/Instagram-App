@@ -34,7 +34,7 @@ function Navbar({ minimalNavbar }) {
   const path = history.location.pathname;
 
   React.useEffect(() => {
-    setTimeout(() => setLoadingPage(false), 10000);
+    setLoadingPage(false);
   }, [path]);
 
   return (
