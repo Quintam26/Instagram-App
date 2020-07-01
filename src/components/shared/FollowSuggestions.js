@@ -9,19 +9,19 @@ import FollowButton from './FollowButton';
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
-function FollowSuggestions() {
+function FollowSuggestions({ hideHeader }) {
   const classes = useFollowSuggestionsStyles();
   let loading = false;
 
   return (
     <div className={classes.container}>
-      <Typography
+      {!hideHeader && <Typography
         color='textSecondary'
         variant='subtitle2'
         className={classes.typography}
       >
         Suggestions For You
-      </Typography>
+      </Typography>}
       {loading ? (
         <LoadingLargeIcon />
       ) : (

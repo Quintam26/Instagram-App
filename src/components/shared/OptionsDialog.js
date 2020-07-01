@@ -26,8 +26,9 @@ function OptionsDialog({ onClose }) {
       <Divider />
       <Button className={classes.button}>Copy Link</Button>
       <Divider />
-      <Button className={classes.button} onClick={onClose}>Cancel</Button>
-
+      <Button className={classes.button} onClick={onClose}>
+        Cancel
+      </Button>
     </Dialog>
   );
 }
