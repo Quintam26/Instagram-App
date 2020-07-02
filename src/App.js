@@ -11,7 +11,6 @@ import NotFoundPage from './pages/not-found';
 import PostModal from './components/post/PostModal';
 import { useHistory, useLocation } from 'react-router-dom';
 
-
 function App() {
   const history = useHistory();
   const location = useLocation();
@@ -19,13 +18,16 @@ function App() {
   const modal = location.state?.modal;
 
   React.useEffect(() => {
-    if(history.action !== 'POP' && !modal) {
+    if (history.action !== 'POP' && !modal) {
       prevLocation.current = location;
     }
-  }, [location, modal, history.action])
+  }, [location, modal, history.action]);
+
+  const isModalOpen = modal && prevLocation !== location;
 
   return (
-      <Switch>
+    <>
+      <Switch location={isModalOpen ? prevLocation.current : location}>
         <Route exact path='/' component={FeedPage} />
         <Route path='/explore' component={ExplorePage} />
         <Route exact path='/:username' component={ProfilePage} />
@@ -35,6 +37,8 @@ function App() {
         <Route path='/accounts/emailsignup' component={SignUpPage} />
         <Route path='*' component={NotFoundPage} />
       </Switch>
+      {isModalOpen && <Route exact path='/p/:postId' component={PostModal} />}
+    </>
   );
 }
 
