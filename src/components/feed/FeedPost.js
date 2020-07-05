@@ -28,6 +28,7 @@ function FeedPost({ post, index }) {
   const [showOptionsDialog, setOptionsDialog] = React.useState();
   const { media, id, likes, user, caption, comments } = post;
   const showFollowSuggestions = index === 1;
+  
   return (
     <>
       <article
