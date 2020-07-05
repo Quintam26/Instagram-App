@@ -15,6 +15,7 @@ function PostModal() {
     <>
       <Modal
         isOpen
+        ariaHideApp={false}
         overlayClassName={classes.overlay}
         onRequestClose={() => history.goBack()}
         style={{
