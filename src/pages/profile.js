@@ -13,6 +13,7 @@ import {
   Dialog,
   Divider,
   DialogTitle,
+  Avatar,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { GearIcon } from '../icons';
@@ -20,7 +21,7 @@ import { GearIcon } from '../icons';
 function ProfilePage() {
   const classes = useProfilePageStyles();
   const [showOptionsMenu, setOptionsMenu] = React.useState(false);
-  const isOwner = true;
+  const isOwner = false;
 
   function handleOptionsMenuClick() {
     setOptionsMenu(true);
@@ -73,14 +74,19 @@ function ProfilePage() {
 
 function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
   const classes = useProfilePageStyles();
+  const [showUnfollowDialog, setUnfollowDialog] = React.useState(false);
 
   let followButton;
-  const isFollowing = false;
+  const isFollowing = true;
   const isFollower = false;
 
   if (isFollowing) {
     followButton = (
-      <Button variant='outlined' className={classes.button}>
+      <Button
+        onClick={() => setUnfollowDialog(true)}
+        variant='outlined'
+        className={classes.button}
+      >
         Following
       </Button>
     );
@@ -116,7 +122,7 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
               </div>
             </>
           ) : (
-            { followButton }
+            followButton
           )}
         </section>
       </Hidden>
@@ -146,7 +152,48 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
           )}
         </section>
       </Hidden>
+      {showUnfollowDialog && (
+        <UnfollowDialog user={user} onClose={() => setUnfollowDialog(false)} />
+      )}
     </>
+  );
+}
+
+function UnfollowDialog({ onClose, user }) {
+  const classes = useProfilePageStyles();
+
+  return (
+    <Dialog
+      open
+      classes={{
+        scrollPaper: classes.unfollowDialogScrollPaper,
+      }}
+      onClose
+      TransitionComponent={Zoom}
+    >
+      <div className={classes.wrapper}>
+        <Avatar
+          src={user.profile_image}
+          alt={`${user.username}'s avatar`}
+          className={classes.avatar}
+        />
+      </div>
+      <Typography
+        align='center'
+        variant='body2'
+        className={classes.unfollowDialogText}
+      >
+        Unfollow @{user.username}?
+      </Typography>
+      <Divider />
+      <Button className={classes.unfollowButton}>
+        Unfollow
+      </Button>
+      <Divider />
+      <Button onClick={onClose} className={classes.cancelButton}>
+        Cancel
+      </Button>
+    </Dialog>
   );
 }
 
