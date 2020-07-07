@@ -9,6 +9,10 @@ import {
   CardContent,
   Button,
   Typography,
+  Zoom,
+  Dialog,
+  Divider,
+  DialogTitle,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { GearIcon } from '../icons';
@@ -20,6 +24,10 @@ function ProfilePage() {
 
   function handleOptionsMenuClick() {
     setOptionsMenu(true);
+  }
+
+  function handleCloseMenu() {
+    setOptionsMenu(false);
   }
 
   return (
@@ -57,6 +65,7 @@ function ProfilePage() {
             <PostCountSection />
           </Card>
         </Hidden>
+        {showOptionsMenu && <OptionsMenu handleCloseMenu={handleCloseMenu} />}
       </div>
     </Layout>
   );
@@ -128,7 +137,9 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
           </div>
           {isOwner ? (
             <Link to='/accounts/edit'>
-              <Button variant='outlined' style={{ width: '100%' }}>Edit Profile</Button>
+              <Button variant='outlined' style={{ width: '100%' }}>
+                Edit Profile
+              </Button>
             </Link>
           ) : (
             followButton
@@ -145,6 +156,56 @@ function PostCountSection() {
 
 function NameBioSection() {
   return <>NameBioSection</>;
+}
+
+function OptionsMenu({ handleCloseMenu }) {
+  const classes = useProfilePageStyles();
+  const [showLogOutMessage, setLogOutMessage] = React.useState(false);
+
+  function handleLogOutClick() {
+    setLogOutMessage(true);
+  }
+
+  return (
+    <Dialog
+      open
+      classes={{
+        scrollPaper: classes.dialogScrollPaper,
+        paper: classes.dialogPaper,
+      }}
+      TransitionComponent={Zoom}
+    >
+      {showLogOutMessage ? (
+        <DialogTitle className={classes.dialogTitle}>
+          Logging Out
+          <Typography color='textSecondary'>
+            You need to log back in to continue using Instagram.
+          </Typography>
+        </DialogTitle>
+      ) : (
+        <>
+          <OptionsItem text='Change Password' />
+          <OptionsItem text='Nametag' />
+          <OptionsItem text='Authorized Apps' />
+          <OptionsItem text='Notifications' />
+          <OptionsItem text='Privacy and Security' />
+          <OptionsItem text='Log Out' onClick={handleLogOutClick} />
+          <OptionsItem text='Cancel' onClick={handleCloseMenu} />
+        </>
+      )}
+    </Dialog>
+  );
+}
+
+function OptionsItem({ text, onClick }) {
+  return (
+    <>
+      <Button style={{ padding: '12px 8px ' }} onClick={onClick}>
+        {text}
+      </Button>
+      <Divider />
+    </>
+  );
 }
 
 export default ProfilePage;
