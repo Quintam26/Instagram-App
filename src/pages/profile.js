@@ -17,11 +17,12 @@ import {
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { GearIcon } from '../icons';
+import ProfileTabs from '../components/profile/ProfileTabs';
 
 function ProfilePage() {
   const classes = useProfilePageStyles();
   const [showOptionsMenu, setOptionsMenu] = React.useState(false);
-  const isOwner = false;
+  const isOwner = true;
 
   function handleOptionsMenuClick() {
     setOptionsMenu(true);
@@ -67,6 +68,7 @@ function ProfilePage() {
           </Card>
         </Hidden>
         {showOptionsMenu && <OptionsMenu handleCloseMenu={handleCloseMenu} />}
+        <ProfileTabs user={defaultCurrentUser} isOwner={isOwner} />
       </div>
     </Layout>
   );
@@ -234,7 +236,9 @@ function NameBioSection({ user }) {
       <Typography className={classes.typography}>{user.name}</Typography>
       <Typography>{user.bio}</Typography>
       <a href={user.website} target='_blank' rel='noopener noreferrer'>
-        <Typography color='secondary' className={classes.typography}>{user.website}</Typography>
+        <Typography color='secondary' className={classes.typography}>
+          {user.website}
+        </Typography>
       </a>
     </section>
   );
