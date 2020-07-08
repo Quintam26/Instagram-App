@@ -3,6 +3,8 @@
         "button",
         "emailsignup",
         "nametag",
+        "noopener",
+        "noreferrer",
         "signup",
         "unfollow",
         "unfollow button"
