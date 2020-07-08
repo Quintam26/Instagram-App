@@ -1,7 +1,8 @@
 import React from 'react';
 import { useProfileTabsStyles } from '../../styles';
-import { Hidden, Divider, Tabs, Tab } from '@material-ui/core';
+import { Hidden, Divider, Tabs, Tab, Typography } from '@material-ui/core';
 import { GridIcon, SaveIcon } from '../../icons';
+import GridPost from '../shared/GridPost';
 
 function ProfileTabs({ user, isOwner }) {
   const classes = useProfileTabsStyles();
@@ -71,8 +72,54 @@ function ProfileTabs({ user, isOwner }) {
           </Tabs>
         </Hidden>
         <Hidden smUp>{user.posts.length === 0 && <Divider />}</Hidden>
+        {value === 0 && <ProfilePosts user={user} isOwner={isOwner} />}
+        {value === 1 && <SavedPosts />}
       </section>
     </>
+  );
+}
+
+function ProfilePosts({ user, isOwner }) {
+  const classes = useProfileTabsStyles();
+
+  if (user.posts.length === 0) {
+    return (
+      <section className={classes.profilePostsSection}>
+        <div className={classes.noContent}>
+          <div className={classes.uploadPhotoIcon} />
+          <Typography variant='h4'>
+            {isOwner ? 'Upload a Photo' : 'No Photos'}
+          </Typography>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <article className={classes.article}>
+      <div className={classes.postContainer}>
+        {user.posts.map((post) => (
+          <GridPost key={post.id} post={post} />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function SavedPosts() {
+  const classes = useProfileTabsStyles();
+
+  return (
+    <section className={classes.savedPostsSection}>
+      <div className={classes.noContent}>
+        <div className={classes.savePhotoIcon} />
+        <Typography variant='h4'>Saved</Typography>
+        <Typography align='center'>
+          Save photos and videos that you want to see again. No on is notified,
+          and only you can see what you've saved.
+        </Typography>
+      </div>
+    </section>
   );
 }
 
