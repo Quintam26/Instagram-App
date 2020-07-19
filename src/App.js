@@ -10,8 +10,11 @@ import SignUpPage from './pages/signup';
 import NotFoundPage from './pages/not-found';
 import PostModal from './components/post/PostModal';
 import { useHistory, useLocation } from 'react-router-dom';
+import { AuthContext } from './auth';
 
 function App() {
+  const { authState } = React.useContext(AuthContext);
+  console.log({ authState });
   const history = useHistory();
   const location = useLocation();
   const prevLocation = React.useRef(location);
