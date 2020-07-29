@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import FeedPage from './pages/feed';
 import ExplorePage from './pages/explore';
 import ProfilePage from './pages/profile';
@@ -14,7 +14,7 @@ import { AuthContext } from './auth';
 
 function App() {
   const { authState } = React.useContext(AuthContext);
-  console.log({ authState });
+  const isAuth = authState === 'in';
   const history = useHistory();
   const location = useLocation();
   const prevLocation = React.useRef(location);
@@ -27,6 +27,16 @@ function App() {
   }, [location, modal, history.action]);
 
   const isModalOpen = modal && prevLocation !== location;
+
+  if (!isAuth) {
+    return (
+      <Switch>
+        <Route path='/accounts/login' component={LoginPage} />
+        <Route path='/accounts/emailsignup' component={SignUpPage} />
+        <Redirect to='/accounts/login' />
+      </Switch>
+    );
+  }
 
   return (
     <>
